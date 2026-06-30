@@ -134,6 +134,43 @@
   .accent-green .ico svg{color:var(--green)} .accent-green h2{color:var(--green)}
   .accent-amber .ico{background:rgba(255,170,0,0.08);border-color:rgba(255,170,0,0.3)}
   .accent-amber .ico svg{color:var(--amber)} .accent-amber h2{color:var(--amber)}
+  .accent-purple .ico{background:rgba(166,77,255,0.08);border-color:rgba(166,77,255,0.3)}
+  .accent-purple .ico svg{color:var(--purple)} .accent-purple h2{color:var(--purple)}
+
+  /* sector chip box */
+  .sectorbox{
+    margin:6px 0;
+    background:linear-gradient(160deg, rgba(166,77,255,0.05), rgba(0,220,255,0.03));
+    border:1px solid var(--border-soft);border-radius:14px;padding:18px 20px;
+  }
+  .sectorbox h3{
+    font-family:'Sora',sans-serif;font-size:12.5px;font-weight:700;letter-spacing:.5px;
+    color:var(--white);margin-bottom:13px;display:flex;align-items:center;gap:9px;
+  }
+  .sectorbox h3 svg{width:16px;height:16px;color:var(--purple)}
+  .chips{display:flex;flex-wrap:wrap;gap:8px}
+  .chip{
+    font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--white);
+    background:rgba(166,77,255,0.08);border:1px solid rgba(166,77,255,0.25);
+    border-radius:7px;padding:6px 11px;letter-spacing:.3px;
+  }
+  .sectorbox .note{font-size:11px;color:var(--muted2);margin-top:12px;line-height:1.5}
+
+  /* NEW badge on freshly-added command cards */
+  .newtag{
+    font-family:'Sora',sans-serif;font-size:9px;font-weight:700;letter-spacing:1px;
+    color:var(--amber);background:rgba(255,170,0,0.12);
+    border:1px solid rgba(255,170,0,0.4);border-radius:5px;
+    padding:2px 6px;margin-left:2px;text-transform:uppercase;
+    box-shadow:0 0 10px rgba(255,170,0,0.15);
+  }
+  /* last-updated stamp in header */
+  .updated{
+    margin-top:14px;font-size:11px;color:var(--muted2);letter-spacing:.5px;
+    display:flex;align-items:center;gap:7px;
+  }
+  .updated svg{width:13px;height:13px;color:var(--amber)}
+  .updated b{color:var(--amber);font-weight:600}
 
   .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
   .card{
@@ -268,8 +305,12 @@
       <span class="pill"><span class="dot"></span>BOT ONLINE</span>
     </div>
     <p class="tag">
-      The scanner bot lets you pull live <b>RS ratings</b>, the <b>bench</b>, top option contracts, and earnings on demand — plus set personal <b>watchlists</b> that ping you the moment your stocks hit the scanner. Type any command in any channel.
+      The scanner bot lets you pull live <b>RS ratings</b>, the <b>bench</b>, top option contracts, earnings, <b>sector leaders</b>, and a daily <b>recap</b> on demand — plus set personal <b>watchlists</b> that ping you the moment your stocks hit the scanner. Type any command in any channel.
     </p>
+    <div class="updated">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+      Last updated <b>June 29, 2026</b> — added /recap, /compare, /leaders, /sector, /history, and /unwatch scopes.
+    </div>
   </div>
 
   <!-- ACCESS -->
@@ -361,9 +402,9 @@
         <div class="ex">no ticker needed</div>
       </div>
       <div class="card amber">
-        <div class="cmd"><span class="slash">/unwatch</span> <span class="arg">TICKER</span></div>
-        <div class="desc">Removes a stock from <b>both</b> of your watchlists.</div>
-        <div class="ex">e.g. <span>/unwatch NBIS</span></div>
+        <div class="cmd"><span class="slash">/unwatch</span> <span class="arg">TICKER</span> <span class="arg">scope: day|swing|all</span> <span class="newtag">Updated</span></div>
+        <div class="desc">Remove a single name with <b>/unwatch TICKER</b>, or clear a whole list with a <b>scope</b> — <b>day</b>, <b>swing</b>, or <b>all</b>. A confirmation button appears before wiping a list so you never clear one by accident.</div>
+        <div class="ex">e.g. <span>/unwatch NBIS</span> · <span>/unwatch scope: all</span></div>
       </div>
       <div class="card orange">
         <div class="cmd"><span class="slash">/mute</span></div>
@@ -389,6 +430,73 @@
       <div class="data">Intraday RS: <span class="v">94</span> &nbsp;|&nbsp; Weekly RS: <span class="v">71</span></div>
       <div class="data">Price: <span class="v">$48.20</span> <span class="up">(+6.8% today)</span></div>
       <div class="data contract">Top contract: 50C 7/2 (3,241)</div>
+    </div>
+
+    <!-- NEW: ANALYSIS COMMANDS -->
+    <div class="section-label accent-cyan">
+      <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 14l4-4 3 3 5-6"/></svg></span>
+      <h2>Analysis Commands</h2>
+      <span class="hint">added today</span>
+    </div>
+    <div class="grid">
+      <div class="card cyan">
+        <div class="cmd"><span class="slash">/recap</span> <span class="newtag">New</span></div>
+        <div class="desc"><b>Today's bench changes at a glance.</b> Who's NEW to the bench, who FELL OFF, and who's NEWLY HEATING UP versus yesterday — each with their RS ratings. The fastest way to catch what shifted.</div>
+        <div class="ex">no ticker needed</div>
+      </div>
+      <div class="card cyan">
+        <div class="cmd"><span class="slash">/compare</span> <span class="arg">TICKER1</span> <span class="arg">TICKER2</span> <span class="newtag">New</span></div>
+        <div class="desc"><b>Two names, head to head.</b> Side-by-side LT RS, ST RS, liquidity, price, day move, and bench status. Settles "which one's stronger right now" in one command.</div>
+        <div class="ex">e.g. <span>/compare AMD MU</span></div>
+      </div>
+      <div class="card cyan">
+        <div class="cmd"><span class="slash">/leaders</span> <span class="arg">count</span> <span class="newtag">New</span></div>
+        <div class="desc"><b>The strongest names in the whole market</b> by combined RS — regardless of whether they're on the bench. Your "what's hot right now" pull. Defaults to top 10, up to 25.</div>
+        <div class="ex">e.g. <span>/leaders 15</span></div>
+      </div>
+      <div class="card cyan">
+        <div class="cmd"><span class="slash">/history</span> <span class="arg">TICKER</span> <span class="newtag">New</span></div>
+        <div class="desc"><b>How a name has trended.</b> Its Short-Term RS over recent days plus how many days it's held the bench — staying power versus a one-day pop.</div>
+        <div class="ex">e.g. <span>/history NVDA</span></div>
+      </div>
+    </div>
+
+    <!-- NEW: SECTOR -->
+    <div class="section-label accent-purple">
+      <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></span>
+      <h2>Sector Rotation</h2>
+      <span class="hint">strongest names by theme</span>
+    </div>
+    <div class="grid">
+      <div class="card purple full">
+        <div class="cmd"><span class="slash">/sector</span> <span class="arg">NAME</span> <span class="newtag">New</span></div>
+        <div class="desc"><b>The strongest names in a sector, ranked by RS.</b> Perfect for reading rotation — see at a glance whether semis, crypto, or AI compute is leading today. Type the command with no sector name to list every group.</div>
+        <div class="ex">e.g. <span>/sector semis</span> &nbsp;·&nbsp; <span>/sector crypto</span> &nbsp;·&nbsp; <span>/sector ai compute</span></div>
+      </div>
+    </div>
+    <div class="sectorbox">
+      <h3>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v4H4z"/><path d="M4 12h16v8H4z"/></svg>
+        Available sectors
+      </h3>
+      <div class="chips">
+        <span class="chip">Semis</span>
+        <span class="chip">Mega Cap Tech</span>
+        <span class="chip">Software Internet</span>
+        <span class="chip">Fintech</span>
+        <span class="chip">Crypto</span>
+        <span class="chip">AI Compute Data</span>
+        <span class="chip">Space Defense</span>
+        <span class="chip">Quantum</span>
+        <span class="chip">Health Biotech</span>
+        <span class="chip">Consumer Momentum</span>
+        <span class="chip">Energy Nuclear</span>
+        <span class="chip">Commodities Macro</span>
+        <span class="chip">Financials</span>
+        <span class="chip">Industrials Transport</span>
+        <span class="chip">Legacy Tech Hardware</span>
+      </div>
+      <div class="note">Loose matching works — "ai compute", "health", or "semis" all resolve. A few names live in two sectors (CRWV, NBIS and IREN show under both Crypto and AI Compute Data).</div>
     </div>
 
   </div>
