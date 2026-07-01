@@ -3,13 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>The Market Bishop — Bot Command Guide</title>
+<title>The Market Bishop — RS Scanner Command Guide</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Sora:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
   :root{
-    /* palette matched to the scanner image_generator (cyan / amber / neon-green) */
     --bg:#04060c;
     --bg2:#070b14;
     --card:#0a0f1c;
@@ -85,7 +84,7 @@
     font-size:12.5px;color:var(--amber);font-weight:500;letter-spacing:2.5px;
   }
   .head .tag{
-    margin-top:20px;font-size:14px;color:var(--muted);line-height:1.6;max-width:760px;
+    margin-top:20px;font-size:14px;color:var(--muted);line-height:1.6;max-width:820px;
   }
   .head .tag b{color:var(--cyan);font-weight:700}
   .pill{
@@ -97,7 +96,7 @@
   }
   .dot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green)}
 
-  /* ---------- access banner ---------- */
+  /* ---------- banners ---------- */
   .access{
     display:flex;align-items:center;gap:12px;
     padding:14px 40px;
@@ -107,6 +106,17 @@
   }
   .access svg{width:18px;height:18px;flex:none;color:var(--amber)}
   .access b{color:var(--amber);font-weight:700}
+
+  .whatsnew{
+    display:flex;align-items:flex-start;gap:12px;
+    padding:14px 40px;
+    background:rgba(0,255,120,0.05);
+    border-bottom:1px solid var(--border-soft);
+    font-size:12.5px;color:var(--white);line-height:1.65;
+  }
+  .whatsnew svg{width:18px;height:18px;flex:none;color:var(--green);margin-top:1px}
+  .whatsnew b{color:var(--green);font-weight:700}
+  .whatsnew .u{color:var(--amber);font-weight:700}
 
   /* ---------- body ---------- */
   .body{padding:30px 40px 14px}
@@ -127,7 +137,6 @@
   .section-label .hint{
     font-size:11.5px;color:var(--muted2);margin-left:auto;font-weight:400;
   }
-  /* accent variants */
   .accent-cyan .ico{background:rgba(0,220,255,0.08);border-color:rgba(0,220,255,0.3)}
   .accent-cyan .ico svg{color:var(--cyan)} .accent-cyan h2{color:var(--cyan)}
   .accent-green .ico{background:rgba(0,255,120,0.08);border-color:rgba(0,255,120,0.3)}
@@ -136,41 +145,6 @@
   .accent-amber .ico svg{color:var(--amber)} .accent-amber h2{color:var(--amber)}
   .accent-purple .ico{background:rgba(166,77,255,0.08);border-color:rgba(166,77,255,0.3)}
   .accent-purple .ico svg{color:var(--purple)} .accent-purple h2{color:var(--purple)}
-
-  /* sector chip box */
-  .sectorbox{
-    margin:6px 0;
-    background:linear-gradient(160deg, rgba(166,77,255,0.05), rgba(0,220,255,0.03));
-    border:1px solid var(--border-soft);border-radius:14px;padding:18px 20px;
-  }
-  .sectorbox h3{
-    font-family:'Sora',sans-serif;font-size:12.5px;font-weight:700;letter-spacing:.5px;
-    color:var(--white);margin-bottom:13px;display:flex;align-items:center;gap:9px;
-  }
-  .sectorbox h3 svg{width:16px;height:16px;color:var(--purple)}
-  .chips{display:flex;flex-wrap:wrap;gap:8px}
-  .chip{
-    font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--white);
-    background:rgba(166,77,255,0.08);border:1px solid rgba(166,77,255,0.25);
-    border-radius:7px;padding:6px 11px;letter-spacing:.3px;
-  }
-  .sectorbox .note{font-size:11px;color:var(--muted2);margin-top:12px;line-height:1.5}
-
-  /* NEW badge on freshly-added command cards */
-  .newtag{
-    font-family:'Sora',sans-serif;font-size:9px;font-weight:700;letter-spacing:1px;
-    color:var(--amber);background:rgba(255,170,0,0.12);
-    border:1px solid rgba(255,170,0,0.4);border-radius:5px;
-    padding:2px 6px;margin-left:2px;text-transform:uppercase;
-    box-shadow:0 0 10px rgba(255,170,0,0.15);
-  }
-  /* last-updated stamp in header */
-  .updated{
-    margin-top:14px;font-size:11px;color:var(--muted2);letter-spacing:.5px;
-    display:flex;align-items:center;gap:7px;
-  }
-  .updated svg{width:13px;height:13px;color:var(--amber)}
-  .updated b{color:var(--amber);font-weight:600}
 
   .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
   .card{
@@ -201,6 +175,13 @@
     background:rgba(120,160,220,0.08);border:1px solid var(--border-soft);
     border-radius:5px;padding:2px 7px;letter-spacing:.5px;
   }
+  .badge{
+    font-family:'Sora',sans-serif;font-size:8.5px;font-weight:700;letter-spacing:1px;
+    padding:2px 6px;border-radius:5px;text-transform:uppercase;line-height:1;
+    align-self:center;
+  }
+  .badge.new{color:var(--green);background:rgba(0,255,120,0.12);border:1px solid rgba(0,255,120,0.4)}
+  .badge.upd{color:var(--amber);background:rgba(255,170,0,0.12);border:1px solid rgba(255,170,0,0.4)}
   .desc{font-size:12.5px;color:var(--muted);line-height:1.55}
   .desc b{color:var(--white);font-weight:500}
   .ex{
@@ -208,11 +189,9 @@
     border-top:1px dashed var(--border-soft);padding-top:8px;
   }
   .ex span{color:var(--muted2)}
-
-  /* span full width helper */
   .full{grid-column:1 / -1}
 
-  /* ---------- how watch works ---------- */
+  /* ---------- explainer boxes ---------- */
   .watchbox{
     margin:8px 0 6px;
     background:linear-gradient(160deg, rgba(0,255,120,0.04), rgba(0,220,255,0.03));
@@ -225,6 +204,8 @@
     color:var(--white);margin-bottom:14px;display:flex;align-items:center;gap:9px;
   }
   .watchbox h3 svg{width:17px;height:17px;color:var(--green)}
+  .watchbox>p{font-size:12.5px;color:var(--muted);line-height:1.65}
+  .watchbox>p b{color:var(--white);font-weight:500}
   .flow{display:grid;grid-template-columns:1fr 1fr;gap:14px}
   .flowcol{display:flex;flex-direction:column;gap:9px}
   .flowcol .title{
@@ -245,6 +226,23 @@
     background:var(--bg);border:1px solid var(--border-soft);border-radius:7px;
     padding:8px 10px;color:var(--amber);letter-spacing:.3px;margin-top:2px;
   }
+  .floorbox{
+    margin:12px 0 6px;
+    background:linear-gradient(160deg, rgba(255,170,0,0.05), rgba(0,220,255,0.02));
+    border:1px solid rgba(255,170,0,0.18);
+    border-radius:14px;
+    padding:18px 22px;
+  }
+  .floorbox h3{
+    font-family:'Sora',sans-serif;font-size:13px;font-weight:700;letter-spacing:.6px;
+    color:var(--white);margin-bottom:10px;display:flex;align-items:center;gap:9px;
+  }
+  .floorbox h3 svg{width:17px;height:17px;color:var(--amber)}
+  .floorbox h3 .badge{margin-left:2px}
+  .floorbox p{font-size:12.5px;color:var(--muted);line-height:1.65}
+  .floorbox p b{color:var(--white);font-weight:500}
+  .floorbox .crit{color:var(--green);margin-top:11px}
+  .floorbox .crit span{color:var(--muted2)}
 
   /* ---------- alert preview ---------- */
   .preview{
@@ -280,7 +278,7 @@
 
   @media (max-width:760px){
     body{padding:14px 8px}
-    .head,.access,.body,.foot{padding-left:20px;padding-right:20px}
+    .head,.access,.whatsnew,.body,.foot{padding-left:20px;padding-right:20px}
     .grid,.flow{grid-template-columns:1fr}
     .brandtext h1{font-size:22px}
     .pill{margin-left:0;margin-top:10px}
@@ -300,17 +298,13 @@
       </div>
       <div class="brandtext">
         <h1>THE MARKET BISHOP</h1>
-        <span class="sub">RS SCANNER&nbsp;&nbsp;·&nbsp;&nbsp;BOT COMMANDS</span>
+        <span class="sub">RS SCANNER&nbsp;&nbsp;·&nbsp;&nbsp;SLASH COMMAND GUIDE</span>
       </div>
       <span class="pill"><span class="dot"></span>BOT ONLINE</span>
     </div>
     <p class="tag">
-      The scanner bot lets you pull live <b>RS ratings</b>, the <b>bench</b>, top option contracts, earnings, <b>sector leaders</b>, and a daily <b>recap</b> on demand — plus set personal <b>watchlists</b> that ping you the moment your stocks hit the scanner. Type any command in any channel.
+      Every command the scanner bot understands, in one place. Pull live <b>RS ratings</b>, the <b>bench</b>, sector leaders, top contracts and earnings on demand — set personal <b>watchlists</b> that ping you the moment your stocks hit the scanner — and <b>export</b> any list straight into your charts. Type any command in any channel.
     </p>
-    <div class="updated">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
-      Last updated <b>June 29, 2026</b> — added /recap, /compare, /leaders, /sector, /history, and /unwatch scopes.
-    </div>
   </div>
 
   <!-- ACCESS -->
@@ -321,39 +315,83 @@
     <span>You need the <b>Premium Plus role</b> to use the bot. Commands only work inside the server — the bot never responds in DMs.</span>
   </div>
 
+  <!-- WHAT'S NEW -->
+  <div class="whatsnew">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 2l2.4 5.4 5.6.5-4.2 3.8 1.2 5.8-5-3-5 3 1.2-5.8L4 7.9l5.6-.5z"/>
+    </svg>
+    <span>
+      <b>Just shipped &nbsp;·&nbsp; /export</b> — send any list to ThinkorSwim or TradingView as a ready-to-import file. &nbsp;&nbsp;<span class="u">Updated &nbsp;·&nbsp; custom RS floors</span> — set your own thresholds on <b style="color:var(--amber)">/watchday</b> &amp; <b style="color:var(--amber)">/watchswing</b> so alerts only fire on names that clear your bar.
+    </span>
+  </div>
+
   <!-- BODY -->
   <div class="body">
 
     <!-- LOOKUP -->
     <div class="section-label accent-cyan">
       <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></span>
-      <h2>Lookup Commands</h2>
-      <span class="hint">pull live data on any ticker</span>
+      <h2>Look Up A Name</h2>
+      <span class="hint">live data on any ticker</span>
     </div>
     <div class="grid">
       <div class="card cyan">
         <div class="cmd"><span class="slash">/rs</span> <span class="arg">TICKER</span></div>
-        <div class="desc"><b>The core command.</b> Shows a stock's Long-Term RS (252 days), Short-Term RS (20 days), intraday & weekly RS, liquidity grade, and whether it's on the bench or heating up — with a trend arrow showing if it's strengthening.</div>
+        <div class="desc"><b>The core command.</b> A stock's Long-Term RS (252 days), Short-Term RS (20 days), intraday &amp; weekly RS, liquidity grade, and whether it's on the bench or heating up — with a trend arrow showing if it's strengthening.</div>
         <div class="ex">e.g. <span>/rs NVDA</span></div>
       </div>
       <div class="card cyan">
         <div class="cmd"><span class="slash">/contract</span> <span class="arg">TICKER</span></div>
-        <div class="desc">Returns the <b>highest-volume call and put</b> for the nearest weekly expiry — the contracts actually being traded most right now.</div>
+        <div class="desc">The <b>highest-volume call and put</b> at the nearest weekly expiry — the contracts actually being traded most right now.</div>
         <div class="ex">e.g. <span>/contract HIMS</span></div>
       </div>
       <div class="card cyan">
         <div class="cmd"><span class="slash">/earnings</span> <span class="arg">TICKER</span></div>
-        <div class="desc">Shows the <b>next earnings date</b> and how many days away it is — so you don't get caught holding a contract into a surprise report.</div>
+        <div class="desc">The <b>next earnings date</b> and how many days out — so you don't get caught holding a contract into a surprise report.</div>
         <div class="ex">e.g. <span>/earnings AMD</span></div>
       </div>
       <div class="card cyan">
-        <div class="cmd"><span class="slash">/bench</span></div>
-        <div class="desc">Posts the <b>current Active Bench</b> — the strongest long-term + short-term leaders the scanner is tracking right now.</div>
-        <div class="ex">no ticker needed</div>
+        <div class="cmd"><span class="slash">/compare</span> <span class="arg">TICKER</span> <span class="arg">TICKER</span></div>
+        <div class="desc">Two names <b>side by side</b> — LT &amp; ST RS, liquidity, price, day change, bench status. Settle which one's the stronger setup.</div>
+        <div class="ex">e.g. <span>/compare ALAB NVDA</span></div>
       </div>
       <div class="card cyan full">
+        <div class="cmd"><span class="slash">/history</span> <span class="arg">TICKER</span></div>
+        <div class="desc">A stock's <b>Short-Term RS trend over time</b> plus how many days it's held the bench — see whether strength is building or fading.</div>
+        <div class="ex">e.g. <span>/history PLTR</span></div>
+      </div>
+    </div>
+
+    <!-- THE PICKS -->
+    <div class="section-label accent-amber">
+      <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg></span>
+      <h2>See The Scanner's Picks</h2>
+      <span class="hint">what's leading right now</span>
+    </div>
+    <div class="grid">
+      <div class="card green">
+        <div class="cmd"><span class="slash">/bench</span></div>
+        <div class="desc">The current <b>Active Bench</b> — the strongest long-term + short-term leaders the scanner is tracking (LT RS ≥ 80 and ST RS ≥ 80).</div>
+        <div class="ex">no ticker needed</div>
+      </div>
+      <div class="card orange">
         <div class="cmd"><span class="slash">/heating</span></div>
-        <div class="desc">Posts the <b>Heating Up list</b> — names whose short-term momentum is accelerating away from their long-term base. This is the early-ignition radar for potential swing runners.</div>
+        <div class="desc">The <b>Heating Up list</b> — names whose short-term momentum is accelerating away from their long-term base. Early-ignition radar for swing runners.</div>
+        <div class="ex">no ticker needed</div>
+      </div>
+      <div class="card cyan">
+        <div class="cmd"><span class="slash">/leaders</span> <span class="arg">count</span></div>
+        <div class="desc">The <b>strongest names in the whole universe</b> ranked by combined RS. Add a number for a longer list (up to 25).</div>
+        <div class="ex">e.g. <span>/leaders 15</span></div>
+      </div>
+      <div class="card cyan">
+        <div class="cmd"><span class="slash">/sector</span> <span class="arg">NAME</span></div>
+        <div class="desc">The <b>strongest names inside a sector</b> — Semis, Crypto, AI Compute, Fintech and more. Run it with no name to list every group.</div>
+        <div class="ex">e.g. <span>/sector crypto</span></div>
+      </div>
+      <div class="card amber full">
+        <div class="cmd"><span class="slash">/recap</span></div>
+        <div class="desc">Today's bench changes vs yesterday — what's <b>NEW</b>, what <b>FELL OFF</b>, and what's newly heating up. Your 30-second "what changed" read.</div>
         <div class="ex">no ticker needed</div>
       </div>
     </div>
@@ -361,11 +399,10 @@
     <!-- WATCHLISTS -->
     <div class="section-label accent-green">
       <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg></span>
-      <h2>Personal Watchlists</h2>
+      <h2>Track Your Own Names</h2>
       <span class="hint">get pinged when your stocks hit the scanner</span>
     </div>
 
-    <!-- how the two watch types work -->
     <div class="watchbox">
       <h3>
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
@@ -374,37 +411,47 @@
       <div class="flow">
         <div class="flowcol day">
           <div class="title">DAYTRADE WATCH <span class="tagbox">/watchday</span></div>
-          <p>Pings you when your stock shows up as a <b>strong intraday call candidate</b> — for same-day and short-hold momentum plays. Checked every 5 minutes during market hours.</p>
-          <div class="crit">triggers: top-20 calls &nbsp;·&nbsp; intraday RS ≥ 90 &nbsp;·&nbsp; weekly RS ≥ 60</div>
+          <p>Pings you when your stock shows up as a <b>strong intraday call candidate</b> — for same-day and short-hold momentum plays. Checked every few minutes during market hours.</p>
+          <div class="crit">default trigger: intraday RS ≥ 90 &nbsp;·&nbsp; weekly RS ≥ 60</div>
         </div>
         <div class="flowcol swing">
           <div class="title">SWING WATCH <span class="tagbox">/watchswing</span></div>
           <p>Pings you when your stock <b>hits the bench or heating up</b> — the signal that it's become a genuine market leader worth a multi-day swing.</p>
-          <div class="crit">triggers: makes the bench &nbsp;·&nbsp; LT RS ≥ 80 &nbsp;·&nbsp; ST RS ≥ 80</div>
+          <div class="crit">default trigger: LT RS ≥ 80 &nbsp;·&nbsp; ST RS ≥ 80</div>
         </div>
       </div>
     </div>
 
+    <!-- CUSTOM FLOORS -->
+    <div class="floorbox">
+      <h3>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M7 12h10"/><path d="M10 18h4"/></svg>
+        Set your own strictness <span class="badge upd">updated</span>
+      </h3>
+      <p>By default your watches use the scanner's tuned floors above. Add optional numbers to <b>raise your own bar</b> — you'll only get pinged on names that clear it. Leave them off and nothing changes. Floors are yours alone; they never touch the public scanner, and you can set them anywhere from <b>30 up</b>.</p>
+      <div class="crit">/watchday NBIS <b style="color:var(--white)">95 80</b> &nbsp;<span>&rarr;&nbsp; only pings if intraday RS ≥ 95 AND weekly RS ≥ 80</span></div>
+    </div>
+
     <div class="grid" style="margin-top:12px">
       <div class="card green">
-        <div class="cmd"><span class="slash">/watchday</span> <span class="arg">TICKER</span></div>
-        <div class="desc">Add a stock to your <b>daytrade</b> watch. If it's not in the scanner yet, the bot validates it and adds it automatically. Up to 15 names.</div>
-        <div class="ex">e.g. <span>/watchday NBIS</span></div>
+        <div class="cmd"><span class="slash">/watchday</span> <span class="arg">TICKER</span> <span class="arg">min_intraday</span> <span class="arg">min_weekly</span> <span class="badge upd">upd</span></div>
+        <div class="desc">Add a name to your <b>daytrade</b> watch. Optional RS floors let you tighten the trigger. If it's not in the scanner yet, the bot validates and adds it. Up to 15 names.</div>
+        <div class="ex">e.g. <span>/watchday NBIS</span> &nbsp;or&nbsp; <span>/watchday NBIS 95 80</span></div>
       </div>
       <div class="card cyan">
-        <div class="cmd"><span class="slash">/watchswing</span> <span class="arg">TICKER</span></div>
-        <div class="desc">Add a stock to your <b>swing</b> watch. Pings you when it becomes a bench-level leader. Up to 15 names.</div>
-        <div class="ex">e.g. <span>/watchswing PLTR</span></div>
+        <div class="cmd"><span class="slash">/watchswing</span> <span class="arg">TICKER</span> <span class="arg">min_lt</span> <span class="arg">min_st</span> <span class="badge upd">upd</span></div>
+        <div class="desc">Add a name to your <b>swing</b> watch. Optional LT/ST floors tighten the trigger. Pings when it becomes a bench-level leader. Up to 15 names.</div>
+        <div class="ex">e.g. <span>/watchswing PLTR</span> &nbsp;or&nbsp; <span>/watchswing PLTR 88 88</span></div>
       </div>
       <div class="card amber">
         <div class="cmd"><span class="slash">/mylist</span></div>
-        <div class="desc">Shows <b>both</b> your daytrade and swing watchlists in one place.</div>
+        <div class="desc">Both your daytrade and swing watchlists in one place — <b>including any custom floors</b> you've set.</div>
         <div class="ex">no ticker needed</div>
       </div>
       <div class="card amber">
-        <div class="cmd"><span class="slash">/unwatch</span> <span class="arg">TICKER</span> <span class="arg">scope: day|swing|all</span> <span class="newtag">Updated</span></div>
-        <div class="desc">Remove a single name with <b>/unwatch TICKER</b>, or clear a whole list with a <b>scope</b> — <b>day</b>, <b>swing</b>, or <b>all</b>. A confirmation button appears before wiping a list so you never clear one by accident.</div>
-        <div class="ex">e.g. <span>/unwatch NBIS</span> · <span>/unwatch scope: all</span></div>
+        <div class="cmd"><span class="slash">/unwatch</span> <span class="arg">TICKER</span> <span class="arg">scope</span></div>
+        <div class="desc">Remove one ticker, or clear a whole list with <b>scope: day, swing, or all</b> (asks you to confirm first).</div>
+        <div class="ex">e.g. <span>/unwatch NBIS</span> &nbsp;or&nbsp; <span>/unwatch scope:all</span></div>
       </div>
       <div class="card orange">
         <div class="cmd"><span class="slash">/mute</span></div>
@@ -414,6 +461,25 @@
       <div class="card orange">
         <div class="cmd"><span class="slash">/unmute</span></div>
         <div class="desc">Turn your watch pings <b>back on</b>.</div>
+        <div class="ex">no ticker needed</div>
+      </div>
+    </div>
+
+    <!-- EXPORT + HELP -->
+    <div class="section-label accent-purple">
+      <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></span>
+      <h2>Take It To Your Charts</h2>
+      <span class="hint">export &amp; help</span>
+    </div>
+    <div class="grid">
+      <div class="card purple full">
+        <div class="cmd"><span class="slash">/export</span> <span class="arg">list: bench | heating | daytrade | all</span> <span class="arg">platform: tos | tradingview</span> <span class="badge new">new</span></div>
+        <div class="desc">Export any list as a <b>ready-to-import watchlist file</b>. Pick the list — bench, heating, daytrade, or all — and your platform: <b>ThinkorSwim</b> or <b>TradingView</b> (TradingView symbols come exchange-prefixed for a clean import). The file arrives as a <b>private reply only you can see</b> — run it inside the server, not in DMs.</div>
+        <div class="ex">e.g. <span>/export list:all platform:tradingview</span></div>
+      </div>
+      <div class="card cyan full">
+        <div class="cmd"><span class="slash">/help</span></div>
+        <div class="desc">The <b>full command list</b>, any time, right in Discord.</div>
         <div class="ex">no ticker needed</div>
       </div>
     </div>
@@ -432,73 +498,6 @@
       <div class="data contract">Top contract: 50C 7/2 (3,241)</div>
     </div>
 
-    <!-- NEW: ANALYSIS COMMANDS -->
-    <div class="section-label accent-cyan">
-      <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 14l4-4 3 3 5-6"/></svg></span>
-      <h2>Analysis Commands</h2>
-      <span class="hint">added today</span>
-    </div>
-    <div class="grid">
-      <div class="card cyan">
-        <div class="cmd"><span class="slash">/recap</span> <span class="newtag">New</span></div>
-        <div class="desc"><b>Today's bench changes at a glance.</b> Who's NEW to the bench, who FELL OFF, and who's NEWLY HEATING UP versus yesterday — each with their RS ratings. The fastest way to catch what shifted.</div>
-        <div class="ex">no ticker needed</div>
-      </div>
-      <div class="card cyan">
-        <div class="cmd"><span class="slash">/compare</span> <span class="arg">TICKER1</span> <span class="arg">TICKER2</span> <span class="newtag">New</span></div>
-        <div class="desc"><b>Two names, head to head.</b> Side-by-side LT RS, ST RS, liquidity, price, day move, and bench status. Settles "which one's stronger right now" in one command.</div>
-        <div class="ex">e.g. <span>/compare AMD MU</span></div>
-      </div>
-      <div class="card cyan">
-        <div class="cmd"><span class="slash">/leaders</span> <span class="arg">count</span> <span class="newtag">New</span></div>
-        <div class="desc"><b>The strongest names in the whole market</b> by combined RS — regardless of whether they're on the bench. Your "what's hot right now" pull. Defaults to top 10, up to 25.</div>
-        <div class="ex">e.g. <span>/leaders 15</span></div>
-      </div>
-      <div class="card cyan">
-        <div class="cmd"><span class="slash">/history</span> <span class="arg">TICKER</span> <span class="newtag">New</span></div>
-        <div class="desc"><b>How a name has trended.</b> Its Short-Term RS over recent days plus how many days it's held the bench — staying power versus a one-day pop.</div>
-        <div class="ex">e.g. <span>/history NVDA</span></div>
-      </div>
-    </div>
-
-    <!-- NEW: SECTOR -->
-    <div class="section-label accent-purple">
-      <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></span>
-      <h2>Sector Rotation</h2>
-      <span class="hint">strongest names by theme</span>
-    </div>
-    <div class="grid">
-      <div class="card purple full">
-        <div class="cmd"><span class="slash">/sector</span> <span class="arg">NAME</span> <span class="newtag">New</span></div>
-        <div class="desc"><b>The strongest names in a sector, ranked by RS.</b> Perfect for reading rotation — see at a glance whether semis, crypto, or AI compute is leading today. Type the command with no sector name to list every group.</div>
-        <div class="ex">e.g. <span>/sector semis</span> &nbsp;·&nbsp; <span>/sector crypto</span> &nbsp;·&nbsp; <span>/sector ai compute</span></div>
-      </div>
-    </div>
-    <div class="sectorbox">
-      <h3>
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v4H4z"/><path d="M4 12h16v8H4z"/></svg>
-        Available sectors
-      </h3>
-      <div class="chips">
-        <span class="chip">Semis</span>
-        <span class="chip">Mega Cap Tech</span>
-        <span class="chip">Software Internet</span>
-        <span class="chip">Fintech</span>
-        <span class="chip">Crypto</span>
-        <span class="chip">AI Compute Data</span>
-        <span class="chip">Space Defense</span>
-        <span class="chip">Quantum</span>
-        <span class="chip">Health Biotech</span>
-        <span class="chip">Consumer Momentum</span>
-        <span class="chip">Energy Nuclear</span>
-        <span class="chip">Commodities Macro</span>
-        <span class="chip">Financials</span>
-        <span class="chip">Industrials Transport</span>
-        <span class="chip">Legacy Tech Hardware</span>
-      </div>
-      <div class="note">Loose matching works — "ai compute", "health", or "semis" all resolve. A few names live in two sectors (CRWV, NBIS and IREN show under both Crypto and AI Compute Data).</div>
-    </div>
-
   </div>
 
   <!-- FOOTER -->
@@ -510,6 +509,10 @@
     <div class="note">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4"/><path d="M12 18v4"/><path d="M4.9 4.9l2.8 2.8"/><path d="M16.3 16.3l2.8 2.8"/><path d="M2 12h4"/><path d="M18 12h4"/></svg>
       Each stock pings you only once a day, then resets.
+    </div>
+    <div class="note">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4"/><path d="M8 2v4"/><path d="M3 10h18"/></svg>
+      Updated June 30, 2026
     </div>
     <span class="brand">THE MARKET BISHOP</span>
   </div>
