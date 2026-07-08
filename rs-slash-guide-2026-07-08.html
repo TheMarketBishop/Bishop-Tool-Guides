@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Market Bishop — Bot Command Guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Sora:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#04060c;
+    --bg2:#070b14;
+    --card:#0a0f1c;
+    --card2:#0c1322;
+    --border:rgba(120,160,220,0.14);
+    --border-soft:rgba(120,160,220,0.08);
+    --cyan:#00dcff;
+    --cyan-dim:#0792ad;
+    --amber:#ffaa00;
+    --green:#00ff78;
+    --orange:#ff6a14;
+    --purple:#a64dff;
+    --pink:#ff5fb4;
+    --white:#e9f1ff;
+    --muted:#6f8099;
+    --muted2:#4a586e;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    font-family:'JetBrains Mono',monospace;
+    background:
+      radial-gradient(900px 500px at 12% -8%, rgba(0,220,255,0.10), transparent 60%),
+      radial-gradient(820px 480px at 100% 0%, rgba(255,170,0,0.07), transparent 55%),
+      radial-gradient(700px 600px at 50% 120%, rgba(166,77,255,0.08), transparent 60%),
+      var(--bg);
+    color:var(--white);
+    display:flex;
+    justify-content:center;
+    padding:40px 20px;
+    min-height:100vh;
+  }
+  .sheet{
+    width:1080px;
+    max-width:100%;
+    background:linear-gradient(180deg, var(--bg2), var(--bg));
+    border:1px solid var(--border);
+    border-radius:20px;
+    overflow:hidden;
+    box-shadow:0 0 0 1px rgba(0,0,0,0.4), 0 40px 120px rgba(0,0,0,0.6);
+  }
+
+  /* ---------- header ---------- */
+  .head{
+    position:relative;
+    padding:34px 40px 30px;
+    border-bottom:1px solid var(--border);
+    background:
+      linear-gradient(180deg, rgba(0,220,255,0.05), transparent),
+      var(--card);
+  }
+  .head::after{
+    content:"";position:absolute;left:0;right:0;bottom:-1px;height:1px;
+    background:linear-gradient(90deg,transparent,var(--cyan),transparent);
+    opacity:.6;
+  }
+  .brandrow{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+  .logo{
+    width:46px;height:46px;border-radius:12px;flex:none;
+    display:flex;align-items:center;justify-content:center;
+    background:linear-gradient(145deg, rgba(0,220,255,0.16), rgba(166,77,255,0.14));
+    border:1px solid rgba(0,220,255,0.35);
+    box-shadow:0 0 18px rgba(0,220,255,0.25);
+  }
+  .logo svg{width:26px;height:26px}
+  .brandtext{display:flex;flex-direction:column;gap:2px}
+  .brandtext h1{
+    font-family:'Sora',sans-serif;font-weight:800;font-size:27px;letter-spacing:.5px;
+    color:var(--white);line-height:1.05;
+    text-shadow:0 0 18px rgba(0,220,255,0.35);
+  }
+  .brandtext .sub{
+    font-size:12.5px;color:var(--amber);font-weight:500;letter-spacing:2.5px;
+  }
+  .head .tag{
+    margin-top:20px;font-size:14px;color:var(--muted);line-height:1.6;max-width:840px;
+  }
+  .head .tag b{color:var(--cyan);font-weight:700}
+  .pill{
+    margin-left:auto;align-self:flex-start;
+    font-family:'Sora',sans-serif;font-size:11px;font-weight:700;letter-spacing:1.5px;
+    color:var(--green);background:rgba(0,255,120,0.08);
+    border:1px solid rgba(0,255,120,0.3);border-radius:999px;
+    padding:7px 14px;display:flex;align-items:center;gap:7px;
+  }
+  .dot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green);animation:pulse 2s infinite}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+  @media (prefers-reduced-motion: reduce){.dot{animation:none}}
+
+  /* ---------- access banner ---------- */
+  .access{
+    display:flex;align-items:center;gap:12px;
+    padding:14px 40px;
+    background:rgba(255,170,0,0.06);
+    border-bottom:1px solid var(--border-soft);
+    font-size:13px;color:var(--white);
+  }
+  .access svg{width:18px;height:18px;flex:none;color:var(--amber)}
+  .access b{color:var(--amber);font-weight:700}
+
+  /* ---------- body ---------- */
+  .body{padding:30px 40px 14px}
+  .section-label{
+    display:flex;align-items:center;gap:12px;margin:26px 0 16px;
+  }
+  .section-label:first-child{margin-top:4px}
+  .section-label .ico{
+    width:30px;height:30px;border-radius:8px;flex:none;
+    display:flex;align-items:center;justify-content:center;
+    border:1px solid var(--border);
+  }
+  .section-label .ico svg{width:17px;height:17px}
+  .section-label h2{
+    font-family:'Sora',sans-serif;font-size:15px;font-weight:700;letter-spacing:1px;
+    text-transform:uppercase;
+  }
+  .section-label .hint{
+    font-size:11.5px;color:var(--muted2);margin-left:auto;font-weight:400;
+  }
+  .accent-cyan .ico{background:rgba(0,220,255,0.08);border-color:rgba(0,220,255,0.3)}
+  .accent-cyan .ico svg{color:var(--cyan)} .accent-cyan h2{color:var(--cyan)}
+  .accent-green .ico{background:rgba(0,255,120,0.08);border-color:rgba(0,255,120,0.3)}
+  .accent-green .ico svg{color:var(--green)} .accent-green h2{color:var(--green)}
+  .accent-amber .ico{background:rgba(255,170,0,0.08);border-color:rgba(255,170,0,0.3)}
+  .accent-amber .ico svg{color:var(--amber)} .accent-amber h2{color:var(--amber)}
+  .accent-purple .ico{background:rgba(166,77,255,0.08);border-color:rgba(166,77,255,0.3)}
+  .accent-purple .ico svg{color:var(--purple)} .accent-purple h2{color:var(--purple)}
+  .accent-orange .ico{background:rgba(255,106,20,0.09);border-color:rgba(255,106,20,0.38)}
+  .accent-orange .ico svg{color:var(--orange)} .accent-orange h2{color:var(--orange)}
+
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .card{
+    background:linear-gradient(160deg, var(--card2), var(--card));
+    border:1px solid var(--border-soft);
+    border-radius:13px;
+    padding:16px 18px;
+    position:relative;
+    overflow:hidden;
+  }
+  .card::before{
+    content:"";position:absolute;left:0;top:0;bottom:0;width:3px;
+    background:var(--accent,var(--cyan));opacity:.85;
+  }
+  .card.cyan{--accent:var(--cyan)}
+  .card.green{--accent:var(--green)}
+  .card.amber{--accent:var(--amber)}
+  .card.orange{--accent:var(--orange)}
+  .card.purple{--accent:var(--purple)}
+  .cmd{
+    font-family:'JetBrains Mono',monospace;font-weight:700;font-size:15px;
+    color:var(--white);letter-spacing:.3px;margin-bottom:7px;
+    display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;
+  }
+  .cmd .slash{color:var(--accent,var(--cyan))}
+  .cmd .arg{
+    font-size:11px;font-weight:500;color:var(--muted);
+    background:rgba(120,160,220,0.08);border:1px solid var(--border-soft);
+    border-radius:5px;padding:2px 7px;letter-spacing:.5px;
+  }
+  .cmd .newchip{
+    font-family:'Sora',sans-serif;font-size:9.5px;font-weight:700;letter-spacing:1px;
+    color:var(--amber);background:rgba(255,170,0,0.1);
+    border:1px solid rgba(255,170,0,0.35);border-radius:5px;
+    padding:2px 7px;
+  }
+  .desc{font-size:12.5px;color:var(--muted);line-height:1.55}
+  .desc b{color:var(--white);font-weight:500}
+  .ex{
+    margin-top:9px;font-size:11px;color:var(--cyan-dim);
+    border-top:1px dashed var(--border-soft);padding-top:8px;
+  }
+  .ex span{color:var(--muted2)}
+  .full{grid-column:1 / -1}
+
+  /* ---------- what's new stack ---------- */
+  .ja-stack{display:flex;flex-direction:column;gap:12px;margin:6px 0 4px}
+  .ja-stack .card{padding:18px 22px}
+  .card .cmd.big{font-size:19px;margin-bottom:0}
+  .wn-pill{
+    display:inline-block;font-family:'Sora',sans-serif;font-size:10px;font-weight:700;
+    letter-spacing:1.2px;border-radius:6px;padding:4px 11px;margin:10px 0 11px;
+    color:var(--amber);background:rgba(255,170,0,0.08);border:1px solid rgba(255,170,0,0.4);
+  }
+  .card .desc.big{font-size:13.5px;line-height:1.65}
+  .card .desc.big b{color:var(--white);font-weight:700}
+
+  /* ---------- AI entry-point box ---------- */
+  .aibox{
+    margin:8px 0 6px;
+    background:linear-gradient(160deg, rgba(0,255,120,0.045), rgba(0,220,255,0.03));
+    border:1px solid var(--border-soft);
+    border-radius:14px;
+    padding:20px 22px;
+  }
+  .aibox .lead{font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:16px}
+  .aibox .lead b{color:var(--white);font-weight:600}
+  .entrytrio{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+  .entry{
+    background:var(--bg);border:1px solid var(--border-soft);border-radius:11px;
+    padding:14px 15px;position:relative;overflow:hidden;
+  }
+  .entry::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--ea,var(--cyan));opacity:.85}
+  .entry.cyan{--ea:var(--cyan)} .entry.green{--ea:var(--green)} .entry.purple{--ea:var(--purple)}
+  .entry .et{
+    font-family:'JetBrains Mono',monospace;font-weight:700;font-size:13.5px;color:var(--white);
+    margin-bottom:6px;display:flex;align-items:center;gap:7px;letter-spacing:.3px;
+  }
+  .entry .et .es{color:var(--ea,var(--cyan))}
+  .entry p{font-size:11.5px;color:var(--muted);line-height:1.55}
+  .entry p b{color:var(--white);font-weight:500}
+
+  /* ---------- fence strip ---------- */
+  .fence{
+    display:flex;align-items:flex-start;gap:12px;margin:14px 0 2px;
+    padding:14px 16px;border-radius:11px;
+    background:rgba(0,220,255,0.05);border:1px solid rgba(0,220,255,0.22);
+  }
+  .fence svg{width:20px;height:20px;flex:none;color:var(--cyan);margin-top:1px}
+  .fence p{font-size:12.5px;color:var(--white);line-height:1.55}
+  .fence p b{color:var(--cyan);font-weight:700}
+  .cap-note{
+    margin-top:12px;font-family:'JetBrains Mono',monospace;font-size:11.5px;
+    background:var(--bg);border:1px solid var(--border-soft);border-radius:8px;
+    padding:9px 12px;color:var(--amber);letter-spacing:.2px;
+  }
+  .cap-note b{color:var(--white)}
+
+  /* ---------- watch explainer ---------- */
+  .watchbox{
+    margin:8px 0 6px;
+    background:linear-gradient(160deg, rgba(0,255,120,0.04), rgba(0,220,255,0.03));
+    border:1px solid var(--border-soft);
+    border-radius:14px;
+    padding:20px 22px;
+  }
+  .watchbox h3{
+    font-family:'Sora',sans-serif;font-size:13px;font-weight:700;letter-spacing:.6px;
+    color:var(--white);margin-bottom:14px;display:flex;align-items:center;gap:9px;
+  }
+  .watchbox h3 svg{width:17px;height:17px;color:var(--green)}
+  .flow{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .flowcol{display:flex;flex-direction:column;gap:9px}
+  .flowcol .title{
+    font-size:12px;font-weight:700;letter-spacing:.5px;
+    display:flex;align-items:center;gap:7px;
+  }
+  .flowcol.day .title{color:var(--green)}
+  .flowcol.swing .title{color:var(--cyan)}
+  .flowcol .title .tagbox{
+    font-size:9.5px;padding:2px 7px;border-radius:5px;font-weight:600;letter-spacing:.5px;
+  }
+  .flowcol.day .tagbox{background:rgba(0,255,120,0.1);border:1px solid rgba(0,255,120,0.3);color:var(--green)}
+  .flowcol.swing .tagbox{background:rgba(0,220,255,0.1);border:1px solid rgba(0,220,255,0.3);color:var(--cyan)}
+  .flowcol p{font-size:12px;color:var(--muted);line-height:1.6}
+  .flowcol p b{color:var(--white);font-weight:500}
+  .crit{
+    font-family:'JetBrains Mono',monospace;font-size:11px;
+    background:var(--bg);border:1px solid var(--border-soft);border-radius:7px;
+    padding:8px 10px;color:var(--amber);letter-spacing:.3px;margin-top:2px;
+  }
+
+  /* ---------- on the scans ---------- */
+  .whatnew{
+    margin:8px 0 6px;
+    background:linear-gradient(160deg, rgba(255,170,0,0.05), rgba(166,77,255,0.03));
+    border:1px solid var(--border-soft);
+    border-radius:14px;
+    padding:18px 20px 20px;
+  }
+  .whatnew .lead{
+    font-size:12px;color:var(--muted);line-height:1.6;margin-bottom:14px;
+  }
+  .whatnew .lead b{color:var(--amber);font-weight:700}
+  .upgrades{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .upg{display:flex;gap:11px;align-items:flex-start}
+  .upg .ui{
+    width:28px;height:28px;border-radius:8px;flex:none;
+    display:flex;align-items:center;justify-content:center;
+    border:1px solid var(--border-soft);background:rgba(120,160,220,0.05);
+  }
+  .upg .ui svg{width:15px;height:15px}
+  .upg h4{
+    font-family:'Sora',sans-serif;font-size:12.5px;font-weight:700;
+    color:var(--white);letter-spacing:.3px;margin-bottom:3px;
+  }
+  .upg p{font-size:11.5px;color:var(--muted);line-height:1.5}
+  .upg p b{color:var(--white);font-weight:500}
+  .u-cyan .ui svg{color:var(--cyan)}
+  .u-green .ui svg{color:var(--green)}
+  .u-amber .ui svg{color:var(--amber)}
+  .u-purple .ui svg{color:var(--purple)}
+  .u-orange .ui svg{color:var(--orange)}
+
+  /* ---------- footer ---------- */
+  .foot{
+    padding:20px 40px 26px;border-top:1px solid var(--border);
+    background:var(--card);
+    display:flex;align-items:center;gap:18px;flex-wrap:wrap;
+    font-size:11.5px;color:var(--muted2);
+  }
+  .foot .note{display:flex;align-items:center;gap:8px}
+  .foot .note svg{width:14px;height:14px;color:var(--muted)}
+  .foot .brand{margin-left:auto;color:var(--amber);font-weight:600;letter-spacing:1px}
+
+  @media (max-width:760px){
+    body{padding:14px 8px}
+    .head,.access,.body,.foot{padding-left:20px;padding-right:20px}
+    .grid,.flow,.upgrades,.entrytrio{grid-template-columns:1fr}
+    .brandtext h1{font-size:22px}
+    .pill{margin-left:0;margin-top:10px}
+  }
+</style>
+</head>
+<body>
+<div class="sheet">
+
+  <!-- HEADER -->
+  <div class="head">
+    <div class="brandrow">
+      <div class="logo">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#00dcff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 17l5-5 4 4 8-9"/><path d="M16 7h5v5"/>
+        </svg>
+      </div>
+      <div class="brandtext">
+        <h1>THE MARKET BISHOP</h1>
+        <span class="sub">RS SCANNER&nbsp;&nbsp;·&nbsp;&nbsp;BOT COMMANDS&nbsp;&nbsp;·&nbsp;&nbsp;UPDATED JUL 8 2026</span>
+      </div>
+      <span class="pill"><span class="dot"></span>BOT ONLINE</span>
+    </div>
+    <p class="tag">
+      Pull live <b>RS ratings</b>, the <b>bench</b>, top option contracts, sector strength, and earnings on demand — set personal <b>watchlists</b> that ping you the moment your stocks hit the scanner — and now ask <b>Bishop's Mind</b>, the built-in AI, anything about the board in plain English. Type any command in any channel.
+    </p>
+  </div>
+
+  <!-- ACCESS -->
+  <div class="access">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+    </svg>
+    <span>You need the <b>Premium Plus role</b> to use the bot. Commands and the AI only work inside the server — the bot never responds in DMs.</span>
+  </div>
+
+  <!-- BODY -->
+  <div class="body">
+
+    <!-- WHAT'S NEW -->
+    <div class="section-label accent-orange" style="margin-top:4px">
+      <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L4.5 13.5H12l-1 8.5 8.5-11.5H12z"/></svg></span>
+      <h2>What's New</h2>
+      <span class="hint">newest commands &amp; scan upgrades</span>
+    </div>
+    <div class="ja-stack">
+      <div class="card cyan">
+        <div class="cmd big">Meet Bishop's Mind</div>
+        <span class="wn-pill">NEW</span>
+        <div class="desc big">The scanner now has its <b>own AI assistant</b>. Ask it anything about the board — a stock's RS, the bench, which sector's hottest — in plain English. Reach it three ways: <b>/ask</b>, <b>@mention</b> it, or <b>reply</b> to any of its answers. Full rundown below.</div>
+      </div>
+      <div class="card green">
+        <div class="cmd big">@mention &amp; reply to keep talking</div>
+        <span class="wn-pill">NEW</span>
+        <div class="desc big">Tag <b>@Bishop's Mind</b> with a question anywhere, or <b>reply</b> to one of its answers to keep the thread going — it <b>remembers the conversation</b>, so you can dig deeper without repeating yourself.</div>
+      </div>
+      <div class="card amber">
+        <div class="cmd big">Live news in your answers</div>
+        <span class="wn-pill">NEW</span>
+        <div class="desc big">Ask <b>why a name's been moving</b> and Bishop's Mind pulls real, current news <b>and</b> shows you what its RS is doing — both folded into one answer, with sources. e.g. <i>"why's ORCL been weak lately."</i></div>
+      </div>
+      <div class="card purple">
+        <div class="cmd big"><span class="slash">/</span>sectorof <span class="arg">TICKER</span></div>
+        <span class="wn-pill">NEW</span>
+        <div class="desc big">Which of Bishop's <b>curated sector buckets</b> a stock is filed under — Semis, AI Compute, and the rest. One name in, its group out. Ask the AI the same thing and you'll get the same answer.</div>
+      </div>
+      <div class="card orange">
+        <div class="cmd big">"1ST SEEN" on the scans</div>
+        <span class="wn-pill">NEW</span>
+        <div class="desc big">Scan images now show <b>when each name first showed up</b> — the <b>time</b> it first hit the daytrade board today, and the <b>date</b> it first made the swing bench. Tells you at a glance who's fresh versus who's been running for a while.</div>
+      </div>
+      <div class="card cyan">
+        <div class="cmd big">Plain-English watchlists</div>
+        <span class="wn-pill">NEW</span>
+        <div class="desc big">Manage your lists by just <b>telling the AI</b> — <i>"watch NVDA for swings," "add HIMS to my day list," "what's on my list."</i> No exact command needed; it confirms before it changes anything.</div>
+      </div>
+    </div>
+
+    <!-- AI ASSISTANT -->
+    <div class="section-label accent-green">
+      <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg></span>
+      <h2>Bishop's Mind — AI Assistant</h2>
+      <span class="hint">ask the board anything</span>
+    </div>
+
+    <div class="aibox">
+      <p class="lead">Bishop's Mind is the scanner's built-in AI. It answers <b>from the live scanner data</b> — it never makes a number up — and it can pull <b>live news</b> when you ask why something's moving. Three ways to reach it:</p>
+      <div class="entrytrio">
+        <div class="entry cyan">
+          <div class="et"><span class="es">/</span>ask</div>
+          <p>Type <b>/ask</b> then your question in any channel. The answer posts publicly so the whole room learns.</p>
+        </div>
+        <div class="entry green">
+          <div class="et">@ mention</div>
+          <p>Tag <b>@Bishop's Mind</b> with a question — same brain, just @ it instead of the slash command.</p>
+        </div>
+        <div class="entry purple">
+          <div class="et">reply to continue</div>
+          <p>Reply to any answer to <b>keep the thread going</b> — it remembers what you were just talking about.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid" style="margin-top:12px">
+      <div class="card green">
+        <div class="cmd">Reads the whole board</div>
+        <div class="desc">Ask about any name's <b>RS</b>, the <b>bench</b>, what's <b>heating up</b>, sector strength, or two tickers head-to-head. It pulls the real scanner rows — no guessing.</div>
+        <div class="ex">e.g. <span>what's NVDA's RS · show me the bench · which sector is hottest</span></div>
+      </div>
+      <div class="card cyan">
+        <div class="cmd">Pulls live news</div>
+        <div class="desc">Ask <b>why</b> a name's moving and it fetches current, real news and folds in what the RS is doing — <b>sources included</b>, all in one answer.</div>
+        <div class="ex">e.g. <span>why's ORCL been weak lately</span></div>
+      </div>
+      <div class="card amber">
+        <div class="cmd">Manages your watchlists</div>
+        <div class="desc">Just say it in plain English — <b>"watch NVDA for swings," "what's on my list," "drop HIMS."</b> It confirms before adding or removing anything.</div>
+        <div class="ex">e.g. <span>add AMD to my day watch</span></div>
+      </div>
+      <div class="card purple">
+        <div class="cmd">Finds names to track</div>
+        <div class="desc">Ask about a stock the scanner <b>isn't tracking yet</b> and it gets flagged for review — so genuinely tradeable names can get added to the board.</div>
+        <div class="ex">e.g. <span>ask about any optionable name not on the scanner</span></div>
+      </div>
+    </div>
+
+    <div class="fence">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      <p><b>It never gives buy/sell calls, entries, exits, or price targets</b> — not even as a joke. Bishop's Mind hands you the data and the <i>why</i>; you read the charts and make the trade. That's the whole point.</p>
+    </div>
+    <div class="cap-note"><b>50 questions per member per day</b> — it tells you how many you've got left. Resets the next day.</div>
+
+    <!-- LOOKUP -->
+    <div class="section-label accent-cyan">
+      <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></span>
+      <h2>Lookup Commands</h2>
+      <span class="hint">pull live data on any ticker</span>
+    </div>
+    <div class="grid">
+      <div class="card cyan">
+        <div class="cmd"><span class="slash">/rs</span> <span class="arg">TICKER</span></div>
+        <div class="desc"><b>The core command.</b> A stock's 252D RS &amp; 20D RS, intraday &amp; weekly RS, liquidity grade, and bench/heating status — with a trend arrow showing if it's strengthening.</div>
+        <div class="ex">e.g. <span>/rs NVDA</span></div>
+      </div>
+      <div class="card cyan">
+        <div class="cmd"><span class="slash">/contract</span> <span class="arg">TICKER</span></div>
+        <div class="desc">The <b>highest-volume call and put</b> for the nearest weekly expiry — the contracts actually being traded most right now.</div>
+        <div class="ex">e.g. <span>/contract HIMS</span></div>
+      </div>
+      <div class="card cyan">
+        <div class="cmd"><span class="slash">/earnings</span> <span class="arg">TICKER</span></div>
+        <div class="desc">The <b>next earnings date</b> and how many days away it is — so you don't get caught holding into a surprise report.</div>
+        <div class="ex">e.g. <span>/earnings AMD</span></div>
+      </div>
+      <div class="card cyan">
+        <div class="cmd"><span class="slash">/bench</span></div>
+        <div class="desc">The <b>current Active Bench</b> — the strongest long-term + short-term leaders the scanner is tracking right now.</div>
+        <div class="ex">no ticker needed</div>
+      </div>
+      <div class="card cyan full">
+        <div class="cmd"><span class="slash">/heating</span></div>
+        <div class="desc">The <b>Heating Up list</b> — names whose short-term momentum is accelerating away from their long-term base. The early-ignition radar for potential swing runners.</div>
+        <div class="ex">no ticker needed</div>
+      </div>
+    </div>
+
+    <!-- ANALYSIS -->
+    <div class="section-label accent-purple">
+      <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 15l3-4 3 2 4-6"/></svg></span>
+      <h2>Scanner Picks &amp; Analysis</h2>
+      <span class="hint">read the whole board, not one name</span>
+    </div>
+    <div class="grid">
+      <div class="card purple">
+        <div class="cmd"><span class="slash">/leaders</span> <span class="arg">count</span></div>
+        <div class="desc">The <b>strongest names in the whole universe</b> by combined RS (252D + 20D averaged). Ask for up to 25.</div>
+        <div class="ex">e.g. <span>/leaders 15</span></div>
+      </div>
+      <div class="card purple">
+        <div class="cmd"><span class="slash">/recap</span></div>
+        <div class="desc">Today's <b>bench changes</b> vs the prior day — who joined, who fell off, what's new.</div>
+        <div class="ex">no ticker needed</div>
+      </div>
+      <div class="card purple">
+        <div class="cmd"><span class="slash">/compare</span> <span class="arg">T1</span> <span class="arg">T2</span></div>
+        <div class="desc">Two tickers <b>side by side</b> — RS, liquidity, and price, head to head.</div>
+        <div class="ex">e.g. <span>/compare AMD MU</span></div>
+      </div>
+      <div class="card purple">
+        <div class="cmd"><span class="slash">/history</span> <span class="arg">TICKER</span></div>
+        <div class="desc">A stock's <b>20D RS trend</b> over time and how many days it's held the bench.</div>
+        <div class="ex">e.g. <span>/history PLTR</span></div>
+      </div>
+      <div class="card purple">
+        <div class="cmd"><span class="slash">/sector</span> <span class="arg">name</span></div>
+        <div class="desc">Bare <b>/sector</b> lists every sector bucket you can pick from. Add a name to see the strongest stocks inside that group.</div>
+        <div class="ex">e.g. <span>/sector semis</span> &nbsp;·&nbsp; <span>/sector</span> for the full list</div>
+      </div>
+      <div class="card purple">
+        <div class="cmd"><span class="slash">/sectorstrength</span></div>
+        <div class="desc"><b>Which corner of the market is strongest.</b> Ranks the sector buckets by average combined RS, with a count of bench-grade leaders in each.</div>
+        <div class="ex">no ticker needed</div>
+      </div>
+      <div class="card purple full">
+        <div class="cmd"><span class="slash">/sectorof</span> <span class="arg">TICKER</span> <span class="newchip">NEW</span></div>
+        <div class="desc">The <b>curated sector bucket(s)</b> a single stock is filed under — e.g. <b>Semis</b>, <b>AI Compute</b>. If it isn't in a specific bucket, you get its broad sector instead.</div>
+        <div class="ex">e.g. <span>/sectorof VRT</span></div>
+      </div>
+    </div>
+
+    <!-- WATCHLISTS -->
+    <div class="section-label accent-green">
+      <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg></span>
+      <h2>Personal Watchlists</h2>
+      <span class="hint">get pinged when your stocks hit the scanner</span>
+    </div>
+
+    <div class="watchbox">
+      <h3>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+        Two watch types — pick the one that matches how you trade
+      </h3>
+      <div class="flow">
+        <div class="flowcol day">
+          <div class="title">DAYTRADE WATCH <span class="tagbox">/watchday</span></div>
+          <p>Pings you when your stock shows up as a <b>strong intraday call candidate</b> — top-of-the-board intraday momentum. For same-day and short-hold plays. Checked every few minutes during market hours.</p>
+          <div class="crit">triggers: strong intraday call candidate on the daytrade board</div>
+        </div>
+        <div class="flowcol swing">
+          <div class="title">SWING WATCH <span class="tagbox">/watchswing</span></div>
+          <p>Pings you when your stock <b>hits the bench or heating up</b> — the signal that it's become a genuine market leader worth a multi-day swing.</p>
+          <div class="crit">triggers: makes the bench or the heating-up list</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid" style="margin-top:12px">
+      <div class="card green">
+        <div class="cmd"><span class="slash">/watchday</span> <span class="arg">TICKER</span></div>
+        <div class="desc">Add a stock to your <b>daytrade</b> watch. If it's not in the scanner yet, the bot validates it and adds it automatically. Up to 15 names.</div>
+        <div class="ex">e.g. <span>/watchday NBIS</span></div>
+      </div>
+      <div class="card cyan">
+        <div class="cmd"><span class="slash">/watchswing</span> <span class="arg">TICKER</span></div>
+        <div class="desc">Add a stock to your <b>swing</b> watch. Pings you when it becomes a bench-level leader. Up to 15 names.</div>
+        <div class="ex">e.g. <span>/watchswing PLTR</span></div>
+      </div>
+      <div class="card amber">
+        <div class="cmd"><span class="slash">/mylist</span></div>
+        <div class="desc">Shows <b>both</b> your daytrade and swing watchlists in one place.</div>
+        <div class="ex">no ticker needed</div>
+      </div>
+      <div class="card amber">
+        <div class="cmd"><span class="slash">/unwatch</span> <span class="arg">TICKER</span></div>
+        <div class="desc">Removes a stock from your watchlists. Use the scope option to clear <b>day</b>, <b>swing</b>, or <b>all</b> at once.</div>
+        <div class="ex">e.g. <span>/unwatch NBIS</span></div>
+      </div>
+      <div class="card orange">
+        <div class="cmd"><span class="slash">/mute</span></div>
+        <div class="desc">Keep your lists but <b>silence</b> all watch pings temporarily.</div>
+        <div class="ex">no ticker needed</div>
+      </div>
+      <div class="card orange">
+        <div class="cmd"><span class="slash">/unmute</span></div>
+        <div class="desc">Turn your watch pings <b>back on</b>.</div>
+        <div class="ex">no ticker needed</div>
+      </div>
+      <div class="card green full">
+        <div class="cmd">…or just tell the AI</div>
+        <div class="desc">All of the above works in <b>plain English</b> through Bishop's Mind — <i>"watch NVDA for swings," "what's on my list," "drop AMD."</i> It confirms before every change.</div>
+        <div class="ex">e.g. <span>@Bishop's Mind add HIMS to my swing watch</span></div>
+      </div>
+    </div>
+
+    <!-- ON THE SCANS -->
+    <div class="section-label accent-amber">
+      <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg></span>
+      <h2>On The Posted Scans</h2>
+      <span class="hint">what you'll see — nothing to type</span>
+    </div>
+    <div class="whatnew">
+      <p class="lead">The scan images that post automatically carry a few <b>built-in reads</b> so you can size up a name at a glance:</p>
+      <div class="upgrades">
+        <div class="upg u-orange">
+          <div class="ui"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div>
+          <div><h4>"1ST SEEN" columns</h4><p>The <b>time</b> a name first hit the daytrade board today, and the <b>date</b> it first made the swing bench.</p></div>
+        </div>
+        <div class="upg u-green">
+          <div class="ui"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
+          <div><h4>IV Rank (IVR)</h4><p><span style="color:var(--green)">Green</span> = cheap options, <span style="color:var(--orange)">orange</span> = rich premium. A quick read on whether you're overpaying for the move.</p></div>
+        </div>
+        <div class="upg u-amber">
+          <div class="ui"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l2.4 7.4H22l-6 4.6 2.3 7.4-6.3-4.6L5.7 21.4 8 14 2 9.4h7.6z"/></svg></div>
+          <div><h4>Earnings badges</h4><p>Swing scans flag any bench name <b>within about a week of earnings</b> — so a multi-day swing doesn't walk into a surprise report.</p></div>
+        </div>
+        <div class="upg u-purple">
+          <div class="ui"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v12H5.2L4 17.2z"/></svg></div>
+          <div><h4>Dedicated swing channel</h4><p>Swing scans post in their <b>own channel</b>, separate from the daytrade scans, so each stream stays clean.</p></div>
+        </div>
+        <div class="upg u-cyan">
+          <div class="ui"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 18 0 9 9 0 0 0-18 0z"/><path d="M8 12l3 3 5-6"/></svg></div>
+          <div><h4>Powered by Unusual Whales</h4><p>Every scan image credits the <b>data source</b> in the footer — the live options, RS, and earnings data all run on the Unusual Whales API.</p></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CHARTS -->
+    <div class="section-label accent-cyan">
+      <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h16"/><path d="M4 20V8"/><path d="M9 20V4"/><path d="M14 20v-8"/><path d="M19 20V10"/></svg></span>
+      <h2>Take It To Your Charts</h2>
+      <span class="hint">export &amp; help</span>
+    </div>
+    <div class="grid">
+      <div class="card cyan">
+        <div class="cmd"><span class="slash">/export</span> <span class="arg">list</span> <span class="arg">platform</span></div>
+        <div class="desc">Download a <b>watchlist file</b> of the bench, heating, or daytrade names — ready to import into <b>ThinkorSwim</b> or <b>TradingView</b>. Add <span style="color:var(--white)">sections</span> to split it into groups.</div>
+        <div class="ex">e.g. <span>/export list:bench platform:tradingview</span></div>
+      </div>
+      <div class="card cyan">
+        <div class="cmd"><span class="slash">/help</span></div>
+        <div class="desc">A quick <b>in-chat rundown</b> of every command, any time you need it.</div>
+        <div class="ex">no ticker needed</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- FOOTER -->
+  <div class="foot">
+    <div class="note">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+      New tickers you add are scanned starting the next trading day.
+    </div>
+    <div class="note">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4"/><path d="M12 18v4"/><path d="M4.9 4.9l2.8 2.8"/><path d="M16.3 16.3l2.8 2.8"/><path d="M2 12h4"/><path d="M18 12h4"/></svg>
+      Each stock pings you only once a day, then resets.
+    </div>
+    <span class="brand">THE MARKET BISHOP</span>
+  </div>
+
+</div>
+</body>
+</html>
