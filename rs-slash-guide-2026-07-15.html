@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Market Bishop — Bot Command Guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Sora:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#04060c;
+    --bg2:#070b14;
+    --card:#0a0f1c;
+    --card2:#0c1322;
+    --border:rgba(120,160,220,0.14);
+    --border-soft:rgba(120,160,220,0.08);
+    --cyan:#00dcff;
+    --cyan-dim:#0792ad;
+    --amber:#ffaa00;
+    --green:#00ff78;
+    --orange:#ff6a14;
+    --purple:#a64dff;
+    --pink:#ff5fb4;
+    --white:#e9f1ff;
+    --muted:#6f8099;
+    --muted2:#4a586e;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    font-family:'JetBrains Mono',monospace;
+    background:
+      radial-gradient(900px 500px at 12% -8%, rgba(0,220,255,0.10), transparent 60%),
+      radial-gradient(820px 480px at 100% 0%, rgba(255,170,0,0.07), transparent 55%),
+      radial-gradient(700px 600px at 50% 120%, rgba(166,77,255,0.08), transparent 60%),
+      var(--bg);
+    color:var(--white);
+    display:flex;
+    justify-content:center;
+    padding:40px 20px;
+    min-height:100vh;
+  }
+  .sheet{
+    width:1080px;
+    max-width:100%;
+    background:linear-gradient(180deg, var(--bg2), var(--bg));
+    border:1px solid var(--border);
+    border-radius:20px;
+    overflow:hidden;
+    box-shadow:0 0 0 1px rgba(0,0,0,0.4), 0 40px 120px rgba(0,0,0,0.6);
+  }
+
+  /* ---------- header ---------- */
+  .head{
+    position:relative;
+    padding:34px 40px 30px;
+    border-bottom:1px solid var(--border);
+    background:
+      linear-gradient(180deg, rgba(0,220,255,0.05), transparent),
+      var(--card);
+  }
+  .head::after{
+    content:"";position:absolute;left:0;right:0;bottom:-1px;height:1px;
+    background:linear-gradient(90deg,transparent,var(--cyan),transparent);
+    opacity:.6;
+  }
+  .brandrow{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+  .logo{
+    width:46px;height:46px;border-radius:12px;flex:none;
+    display:flex;align-items:center;justify-content:center;
+    background:linear-gradient(145deg, rgba(0,220,255,0.16), rgba(166,77,255,0.14));
+    border:1px solid rgba(0,220,255,0.35);
+    box-shadow:0 0 18px rgba(0,220,255,0.25);
+  }
+  .logo svg{width:26px;height:26px}
+  .brandtext{display:flex;flex-direction:column;gap:2px}
+  .brandtext h1{
+    font-family:'Sora',sans-serif;font-weight:800;font-size:27px;letter-spacing:.5px;
+    color:var(--white);line-height:1.05;
+    text-shadow:0 0 18px rgba(0,220,255,0.35);
+  }
+  .brandtext .sub{
+    font-size:12.5px;color:var(--amber);font-weight:500;letter-spacing:2.5px;
+  }
+  .head .tag{
+    margin-top:20px;font-size:14px;color:var(--muted);line-height:1.6;max-width:840px;
+  }
+  .head .tag b{color:var(--cyan);font-weight:700}
+  .pill{
+    margin-left:auto;align-self:flex-start;
+    font-family:'Sora',sans-serif;font-size:11px;font-weight:700;letter-spacing:1.5px;
+    color:var(--green);background:rgba(0,255,120,0.08);
+    border:1px solid rgba(0,255,120,0.3);border-radius:999px;
+    padding:7px 14px;display:flex;align-items:center;gap:7px;
+  }
+  .dot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green)}
+
+  /* ---------- access banner ---------- */
+  .access{
+    display:flex;align-items:center;gap:12px;
+    padding:14px 40px;
+    background:rgba(255,170,0,0.06);
+    border-bottom:1px solid var(--border-soft);
+    font-size:13px;color:var(--white);
+  }
+  .access svg{width:18px;height:18px;flex:none;color:var(--amber)}
+  .access b{color:var(--amber);font-weight:700}
+
+  /* ---------- body ---------- */
+  .body{padding:30px 40px 14px}
+  .section-label{
+    display:flex;align-items:center;gap:12px;margin:24px 0 16px;
+  }
+  .section-label:first-child{margin-top:4px}
+  .section-label .ico{
+    width:30px;height:30px;border-radius:8px;flex:none;
+    display:flex;align-items:center;justify-content:center;
+    border:1px solid var(--border);
+  }
+  .section-label .ico svg{width:17px;height:17px}
+  .section-label h2{
+    font-family:'Sora',sans-serif;font-size:15px;font-weight:700;letter-spacing:1px;
+    text-transform:uppercase;
+  }
+  .section-label .hint{
+    font-size:11.5px;color:var(--muted2);margin-left:auto;font-weight:400;
+  }
+  .accent-cyan .ico{background:rgba(0,220,255,0.08);border-color:rgba(0,220,255,0.3)}
+  .accent-cyan .ico svg{color:var(--cyan)} .accent-cyan h2{color:var(--cyan)}
+  .accent-green .ico{background:rgba(0,255,120,0.08);border-color:rgba(0,255,120,0.3)}
+  .accent-green .ico svg{color:var(--green)} .accent-green h2{color:var(--green)}
+  .accent-amber .ico{background:rgba(255,170,0,0.08);border-color:rgba(255,170,0,0.3)}
+  .accent-amber .ico svg{color:var(--amber)} .accent-amber h2{color:var(--amber)}
+  .accent-purple .ico{background:rgba(166,77,255,0.08);border-color:rgba(166,77,255,0.3)}
+  .accent-purple .ico svg{color:var(--purple)} .accent-purple h2{color:var(--purple)}
+  .accent-orange .ico{background:rgba(255,106,20,0.09);border-color:rgba(255,106,20,0.38)}
+  .accent-orange .ico svg{color:var(--orange)} .accent-orange h2{color:var(--orange)}
+
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .card{
+    background:linear-gradient(160deg, var(--card2), var(--card));
+    border:1px solid var(--border-soft);
+    border-radius:13px;
+    padding:16px 18px;
+    position:relative;
+    overflow:hidden;
+  }
+  .card::before{
+    content:"";position:absolute;left:0;top:0;bottom:0;width:3px;
+    background:var(--accent,var(--cyan));opacity:.85;
+  }
+  .card.cyan{--accent:var(--cyan)}
+  .card.green{--accent:var(--green)}
+  .card.amber{--accent:var(--amber)}
+  .card.orange{--accent:var(--orange)}
+  .card.purple{--accent:var(--purple)}
+  .cmd{
+    font-family:'JetBrains Mono',monospace;font-weight:700;font-size:15px;
+    color:var(--white);letter-spacing:.3px;margin-bottom:7px;
+    display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;
+  }
+  .cmd .slash{color:var(--accent,var(--cyan))}
+  .cmd .arg{
+    font-size:11px;font-weight:500;color:var(--muted);
+    background:rgba(120,160,220,0.08);border:1px solid var(--border-soft);
+    border-radius:5px;padding:2px 7px;letter-spacing:.5px;
+  }
+  .cmd .newchip{
+    font-family:'Sora',sans-serif;font-size:9.5px;font-weight:700;letter-spacing:1px;
+    color:var(--amber);background:rgba(255,170,0,0.1);
+    border:1px solid rgba(255,170,0,0.35);border-radius:5px;
+    padding:2px 7px;
+  }
+  .desc{font-size:12.5px;color:var(--muted);line-height:1.55}
+  .desc b{color:var(--white);font-weight:500}
+  .ex{
+    margin-top:9px;font-size:11px;color:var(--cyan-dim);
+    border-top:1px dashed var(--border-soft);padding-top:8px;
+  }
+  .ex span{color:var(--muted2)}
+  .full{grid-column:1 / -1}
+
+  /* ---------- just added ---------- */
+  .ja-stack{display:flex;flex-direction:column;gap:12px;margin:6px 0 4px}
+  .ja-stack .card{padding:18px 22px}
+  .card .cmd.big{font-size:19px;margin-bottom:0}
+  .wn-pill{
+    display:inline-block;font-family:'Sora',sans-serif;font-size:10px;font-weight:700;
+    letter-spacing:1.2px;border-radius:6px;padding:4px 11px;margin:10px 0 11px;
+    color:var(--amber);background:rgba(255,170,0,0.08);border:1px solid rgba(255,170,0,0.4);
+  }
+  .wn-pill.cmd{color:var(--cyan);background:rgba(0,220,255,0.08);border-color:rgba(0,220,255,0.4)}
+  .card .desc.big{font-size:13.5px;line-height:1.65}
+  .card .desc.big b{color:var(--white);font-weight:700}
+  .bkex{
+    margin-top:12px;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--cyan);
+    background:var(--bg);border:1px solid var(--border-soft);border-radius:8px;padding:9px 12px;letter-spacing:.3px;
+  }
+  .bkex span{color:var(--muted2)}
+
+  /* ---------- how watch works ---------- */
+  .watchbox{
+    margin:8px 0 6px;
+    background:linear-gradient(160deg, rgba(0,255,120,0.04), rgba(0,220,255,0.03));
+    border:1px solid var(--border-soft);
+    border-radius:14px;
+    padding:20px 22px;
+  }
+  .watchbox h3{
+    font-family:'Sora',sans-serif;font-size:13px;font-weight:700;letter-spacing:.6px;
+    color:var(--white);margin-bottom:14px;display:flex;align-items:center;gap:9px;
+  }
+  .watchbox h3 svg{width:17px;height:17px;color:var(--green)}
+  .flow{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .flowcol{display:flex;flex-direction:column;gap:9px}
+  .flowcol .title{
+    font-size:12px;font-weight:700;letter-spacing:.5px;
+    display:flex;align-items:center;gap:7px;
+  }
+  .flowcol.day .title{color:var(--green)}
+  .flowcol.swing .title{color:var(--cyan)}
+  .flowcol .title .tagbox{
+    font-size:9.5px;padding:2px 7px;border-radius:5px;font-weight:600;letter-spacing:.5px;
+  }
+  .flowcol.day .tagbox{background:rgba(0,255,120,0.1);border:1px solid rgba(0,255,120,0.3);color:var(--green)}
+  .flowcol.swing .tagbox{background:rgba(0,220,255,0.1);border:1px solid rgba(0,220,255,0.3);color:var(--cyan)}
+  .flowcol p{font-size:12px;color:var(--muted);line-height:1.6}
+  .flowcol p b{color:var(--white);font-weight:500}
+  .crit{
+    font-family:'JetBrains Mono',monospace;font-size:11px;
+    background:var(--bg);border:1px solid var(--border-soft);border-radius:7px;
+    padding:8px 10px;color:var(--amber);letter-spacing:.3px;margin-top:2px;
+  }
+
+  /* ---------- footer ---------- */
+  .foot{
+    padding:20px 40px 26px;border-top:1px solid var(--border);
+    background:var(--card);
+    display:flex;align-items:center;gap:18px;flex-wrap:wrap;
+    font-size:11.5px;color:var(--muted2);
+  }
+  .foot .note{display:flex;align-items:center;gap:8px}
+  .foot .note svg{width:14px;height:14px;color:var(--muted)}
+  .foot .brand{margin-left:auto;color:var(--amber);font-weight:600;letter-spacing:1px}
+
+  @media (max-width:760px){
+    body{padding:14px 8px}
+    .head,.access,.body,.foot{padding-left:20px;padding-right:20px}
+    .grid,.flow{grid-template-columns:1fr}
+    .brandtext h1{font-size:22px}
+    .pill{margin-left:0;margin-top:10px}
+  }
+</style>
+</head>
+<body>
+<div class="sheet">
+
+  <!-- HEADER -->
+  <div class="head">
+    <div class="brandrow">
+      <div class="logo">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#00dcff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 17l5-5 4 4 8-9"/><path d="M16 7h5v5"/>
+        </svg>
+      </div>
+      <div class="brandtext">
+        <h1>THE MARKET BISHOP</h1>
+        <span class="sub">RS SCANNER&nbsp;&nbsp;·&nbsp;&nbsp;BOT COMMANDS&nbsp;&nbsp;·&nbsp;&nbsp;UPDATED JUL 15 2026</span>
+      </div>
+      <span class="pill"><span class="dot"></span>BOT ONLINE</span>
+    </div>
+    <p class="tag">
+      The scanner bot lets you pull live <b>RS ratings</b>, the <b>bench</b>, top option contracts, sector strength and heatmaps, and earnings on demand — set personal <b>watchlists</b> that ping you the moment your stocks hit the scanner, and now <b>tag past breakouts</b> to study the setup that came before the move. Type any command in any channel.
+    </p>
+  </div>
+
+  <!-- ACCESS -->
+  <div class="access">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+    </svg>
+    <span>You need the <b>Premium Plus role</b> to use the bot. Commands only work inside the server — the bot never responds in DMs.</span>
+  </div>
+
+  <!-- BODY -->
+  <div class="body">
+
+    <!-- WHAT'S NEW -->
+    <div class="section-label accent-orange" style="margin-top:4px">
+      <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L4.5 13.5H12l-1 8.5 8.5-11.5H12z"/></svg></span>
+      <h2>What's New</h2>
+      <span class="hint">newest commands &amp; scan upgrades</span>
+    </div>
+    <div class="ja-stack">
+
+      <div class="card cyan">
+        <div class="cmd big"><span class="slash">/</span>breakout&nbsp;&nbsp;·&nbsp;&nbsp;<span class="slash">/</span>mybreakouts</div>
+        <span class="wn-pill">NEW</span>
+        <div class="desc big">The <b>breakout study tool.</b> Tag a stock and the day it broke out, and the bot stores what its RS looked like the <b>day before the move</b>. Run <b>/mybreakouts</b> and it posts a card of every name you've tagged — the intraday, 5-day, 10-day and 20-day RS heading into each pop, plus the <b>range they all shared</b>. That range is a template you can punch straight into <b>/screen</b> to hunt the next one. Remove a name with <b>/unbreakout</b>.</div>
+        <div class="bkex">/breakout NVDA 7/10/26 &nbsp;<span>— ticker + the day it broke out (dates type easy: 7/5/26)</span></div>
+      </div>
+
+      <div class="card green">
+        <div class="cmd big">RS that moves all day</div>
+        <span class="wn-pill">UPDATED</span>
+        <div class="desc big">The <b>5-day, 10-day and 20-day RS</b> now refresh through the session — about <b>every 5 minutes</b> — instead of once a night, plus a brand-new <b>5-minute read</b> for the freshest same-day move. The <b>/screen</b> board and the intraday <b>/rschart</b> go minute-fresh. The long-term 252-day carries a small <b>°</b> to show it's set as of the prior close.</div>
+      </div>
+
+      <div class="card purple">
+        <div class="cmd big"><span class="slash">/</span>sectorheatmap</div>
+        <span class="wn-pill">NEW</span>
+        <div class="desc big">A <b>heatmap of the whole market by sector</b> — six timeframes, a green-to-red shade ramp — so you can see <b>which corner is hot and which is cold</b> at a single glance. No ticker needed.</div>
+      </div>
+
+      <div class="card amber">
+        <div class="cmd big"><span class="slash">/</span>sectorrank</div>
+        <span class="wn-pill">NEW</span>
+        <div class="desc big">Ranks <b>any ticker against its sector peers</b> — RS pills, % change, an earnings flag, and bench / heating tags, with the top names in the group plus the window around your stock. Shows <b>where your name really stands</b> inside its own sector.</div>
+      </div>
+
+      <div class="card cyan">
+        <div class="cmd big">More RS windows everywhere&nbsp;&nbsp;+&nbsp;&nbsp;Short / Full view</div>
+        <span class="wn-pill">UPDATED</span>
+        <div class="desc big"><b>/leaders</b>, <b>/sector</b>, <b>/recap</b>, <b>/bench</b> and <b>/heating</b> now carry short-interval RS columns — <b>30M · 1HR · INTR · 5D</b>. Add <b>view:Full</b> to also see the 20-day and 252-day. And <b>/sectorstrength</b> was rebuilt into a full picture card with a timeframe and scope choice.</div>
+      </div>
+
+      <div class="card green">
+        <div class="cmd big"><span class="slash">/</span>compare&nbsp;&nbsp;— deeper</div>
+        <span class="wn-pill">UPDATED</span>
+        <div class="desc big"><b>/compare</b> now stacks the short-interval RS rows — <b>1HR · 30M · INTR · 5D</b> and the 10-day — head to head, not just the long-term reads. A far sharper read on <b>which of two names is stronger right now</b>.</div>
+      </div>
+
+      <div class="card orange">
+        <div class="cmd big">Weekend &amp; holiday view</div>
+        <span class="wn-pill">UPDATED</span>
+        <div class="desc big">Over <b>weekends and market holidays</b> the commands, the heatmap and the cards now show the <b>last trading day's RS</b> instead of going blank — so the board still reads over a quiet Sunday.</div>
+      </div>
+
+    </div>
+
+    <!-- LOOKUP -->
+    <div class="section-label accent-cyan">
+      <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></span>
+      <h2>Lookup Commands</h2>
+      <span class="hint">pull live data on any ticker</span>
+    </div>
+    <div class="grid">
+      <div class="card cyan">
+        <div class="cmd"><span class="slash">/rs</span> <span class="arg">TICKER</span></div>
+        <div class="desc"><b>The core command.</b> A stock's Long-Term RS (252d°), Short-Term RS (20d), plus its live 5-day, 10-day, intraday and 5-minute RS, liquidity grade, and bench/heating status — with a trend arrow showing if it's strengthening.</div>
+        <div class="ex">e.g. <span>/rs NVDA</span></div>
+      </div>
+      <div class="card cyan">
+        <div class="cmd"><span class="slash">/contract</span> <span class="arg">TICKER</span></div>
+        <div class="desc">The <b>highest-volume call and put</b> for the nearest weekly expiry — the contracts actually being traded most right now.</div>
+        <div class="ex">e.g. <span>/contract HIMS</span></div>
+      </div>
+      <div class="card cyan">
+        <div class="cmd"><span class="slash">/earnings</span> <span class="arg">TICKER</span></div>
+        <div class="desc">The <b>next earnings date</b> and how many days away it is — so you don't get caught holding into a surprise report.</div>
+        <div class="ex">e.g. <span>/earnings AMD</span></div>
+      </div>
+      <div class="card cyan">
+        <div class="cmd"><span class="slash">/bench</span></div>
+        <div class="desc">The <b>current Active Bench</b> — the strongest long-term + short-term leaders the scanner is tracking right now.</div>
+        <div class="ex">no ticker needed</div>
+      </div>
+      <div class="card cyan full">
+        <div class="cmd"><span class="slash">/heating</span></div>
+        <div class="desc">The <b>Heating Up list</b> — names whose short-term momentum is accelerating away from their long-term base. The early-ignition radar for potential swing runners.</div>
+        <div class="ex">no ticker needed</div>
+      </div>
+    </div>
+
+    <!-- ANALYSIS -->
+    <div class="section-label accent-purple">
+      <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 15l3-4 3 2 4-6"/></svg></span>
+      <h2>Scanner Picks &amp; Analysis</h2>
+      <span class="hint">read the whole board, not one name</span>
+    </div>
+    <div class="grid">
+      <div class="card purple">
+        <div class="cmd"><span class="slash">/leaders</span> <span class="arg">count</span> <span class="arg">view</span></div>
+        <div class="desc">The <b>strongest names in the whole universe</b> by combined RS. Now carries the 30M · 1HR · INTR · 5D columns; add <b>view:Full</b> for the 20d + 252d°. Ask for up to 25.</div>
+        <div class="ex">e.g. <span>/leaders 15 view:Full</span></div>
+      </div>
+      <div class="card purple">
+        <div class="cmd"><span class="slash">/screen</span> <span class="newchip">NEW</span></div>
+        <div class="desc">The <b>full screener board</b> — every liquid stock the scanner rates, in one table: 5M · 30M · 1HR · INTR · 5D · 252D° · day % · liquidity. The widest live read of the market.</div>
+        <div class="ex">no ticker needed</div>
+      </div>
+      <div class="card purple">
+        <div class="cmd"><span class="slash">/sectorheatmap</span> <span class="newchip">NEW</span></div>
+        <div class="desc">A <b>heatmap of the market by sector</b> — six timeframes, green-to-red shading. See which corner is hot and which is cold at a glance.</div>
+        <div class="ex">no ticker needed</div>
+      </div>
+      <div class="card purple">
+        <div class="cmd"><span class="slash">/sectorrank</span> <span class="arg">TICKER</span> <span class="newchip">NEW</span></div>
+        <div class="desc">Ranks a <b>ticker against its sector peers</b> — RS, % change, earnings flag, bench/heating tags, top names + the window around your stock.</div>
+        <div class="ex">e.g. <span>/sectorrank AMD</span></div>
+      </div>
+      <div class="card purple">
+        <div class="cmd"><span class="slash">/sectorstrength</span></div>
+        <div class="desc"><b>Which corner of the market is strongest.</b> A full card ranking the sector buckets — pick a timeframe and whether to score all members or just the top 10 leaders.</div>
+        <div class="ex">no ticker needed</div>
+      </div>
+      <div class="card purple">
+        <div class="cmd"><span class="slash">/sector</span> <span class="arg">name</span></div>
+        <div class="desc">Bare <b>/sector</b> lists every sector bucket you can pick from. Add a name to see the strongest stocks inside that group.</div>
+        <div class="ex">e.g. <span>/sector semis</span></div>
+      </div>
+      <div class="card purple">
+        <div class="cmd"><span class="slash">/compare</span> <span class="arg">T1</span> <span class="arg">T2</span></div>
+        <div class="desc">Two tickers <b>side by side</b> — now with the 1HR · 30M · INTR · 5D and 10d RS rows, plus liquidity and price, head to head.</div>
+        <div class="ex">e.g. <span>/compare AMD MU</span></div>
+      </div>
+      <div class="card purple">
+        <div class="cmd"><span class="slash">/recap</span></div>
+        <div class="desc">Today's <b>bench changes</b> vs the prior day — who joined, who fell off, what's new.</div>
+        <div class="ex">no ticker needed</div>
+      </div>
+      <div class="card purple full">
+        <div class="cmd"><span class="slash">/history</span> <span class="arg">TICKER</span></div>
+        <div class="desc">A stock's <b>Short-Term RS trend</b> over time and how many days it's held the bench.</div>
+        <div class="ex">e.g. <span>/history PLTR</span></div>
+      </div>
+    </div>
+
+    <!-- BREAKOUT STUDY -->
+    <div class="section-label accent-green">
+      <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L4.5 13.5H12l-1 8.5 8.5-11.5H12z"/></svg></span>
+      <h2>Breakout Study</h2>
+      <span class="hint">learn the setup that came before the move</span>
+    </div>
+    <div class="grid">
+      <div class="card green">
+        <div class="cmd"><span class="slash">/breakout</span> <span class="arg">TICKER</span> <span class="arg">DATE</span></div>
+        <div class="desc">Tag a stock and the <b>day it broke out</b>. The bot saves what its RS looked like the day before — the setup, not the move. Dates type easy: <b>7/5/26</b>. Saved to your own list, up to 15.</div>
+        <div class="ex">e.g. <span>/breakout NVDA 7/10/26</span></div>
+      </div>
+      <div class="card cyan">
+        <div class="cmd"><span class="slash">/mybreakouts</span></div>
+        <div class="desc">Posts a <b>card of every name you've tagged</b> — the intraday, 5-day, 10-day and 20-day RS heading into each pop, and the <b>common range</b> across them. Your screener template for the next one.</div>
+        <div class="ex">no ticker needed</div>
+      </div>
+      <div class="card amber full">
+        <div class="cmd"><span class="slash">/unbreakout</span> <span class="arg">TICKER</span></div>
+        <div class="desc">Removes a stock from your breakout list. <span style="color:var(--muted2)">Note: the freshest same-day (intraday) read only fills on breakouts tagged within the last few days; older tags still show all three daily reads reaching back about a year.</span></div>
+        <div class="ex">e.g. <span>/unbreakout NVDA</span></div>
+      </div>
+    </div>
+
+    <!-- WATCHLISTS -->
+    <div class="section-label accent-green">
+      <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg></span>
+      <h2>Personal Watchlists</h2>
+      <span class="hint">get pinged when your stocks hit the scanner</span>
+    </div>
+
+    <div class="watchbox">
+      <h3>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+        Two watch types — pick the one that matches how you trade
+      </h3>
+      <div class="flow">
+        <div class="flowcol day">
+          <div class="title">DAYTRADE WATCH <span class="tagbox">/watchday</span></div>
+          <p>Pings you when your stock shows up as a <b>strong intraday call candidate</b> — for same-day and short-hold momentum plays. Checked every few minutes during market hours.</p>
+          <div class="crit">triggers: top-20 calls &nbsp;·&nbsp; intraday RS ≥ 90 &nbsp;·&nbsp; weekly RS ≥ 60</div>
+        </div>
+        <div class="flowcol swing">
+          <div class="title">SWING WATCH <span class="tagbox">/watchswing</span></div>
+          <p>Pings you when your stock <b>hits the bench or heating up</b> — the signal that it's become a genuine market leader worth a multi-day swing.</p>
+          <div class="crit">triggers: makes the bench &nbsp;·&nbsp; LT RS ≥ 80 &nbsp;·&nbsp; ST RS ≥ 80</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid" style="margin-top:12px">
+      <div class="card green">
+        <div class="cmd"><span class="slash">/watchday</span> <span class="arg">TICKER</span></div>
+        <div class="desc">Add a stock to your <b>daytrade</b> watch. If it's not in the scanner yet, the bot validates it and adds it automatically. Up to 15 names.</div>
+        <div class="ex">e.g. <span>/watchday NBIS</span></div>
+      </div>
+      <div class="card cyan">
+        <div class="cmd"><span class="slash">/watchswing</span> <span class="arg">TICKER</span></div>
+        <div class="desc">Add a stock to your <b>swing</b> watch. Pings you when it becomes a bench-level leader. Up to 15 names.</div>
+        <div class="ex">e.g. <span>/watchswing PLTR</span></div>
+      </div>
+      <div class="card amber">
+        <div class="cmd"><span class="slash">/mylist</span></div>
+        <div class="desc">Shows <b>both</b> your daytrade and swing watchlists in one place.</div>
+        <div class="ex">no ticker needed</div>
+      </div>
+      <div class="card amber">
+        <div class="cmd"><span class="slash">/unwatch</span> <span class="arg">TICKER</span></div>
+        <div class="desc">Removes a stock from your watchlists. Use the scope option to clear <b>day</b>, <b>swing</b>, or <b>all</b> at once.</div>
+        <div class="ex">e.g. <span>/unwatch NBIS</span></div>
+      </div>
+      <div class="card orange">
+        <div class="cmd"><span class="slash">/mute</span></div>
+        <div class="desc">Keep your lists but <b>silence</b> all watch pings temporarily.</div>
+        <div class="ex">no ticker needed</div>
+      </div>
+      <div class="card orange">
+        <div class="cmd"><span class="slash">/unmute</span></div>
+        <div class="desc">Turn your watch pings <b>back on</b>.</div>
+        <div class="ex">no ticker needed</div>
+      </div>
+    </div>
+
+    <!-- CHARTS -->
+    <div class="section-label accent-cyan">
+      <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h16"/><path d="M4 20V8"/><path d="M9 20V4"/><path d="M14 20v-8"/><path d="M19 20V10"/></svg></span>
+      <h2>Charts, Export &amp; Help</h2>
+      <span class="hint">take it to your charts</span>
+    </div>
+    <div class="grid">
+      <div class="card cyan">
+        <div class="cmd"><span class="slash">/rschart</span> <span class="arg">TICKER</span></div>
+        <div class="desc">An <b>RS chart</b> for a stock over time — pick a daily view or an <b>intraday</b> one, right down to the minute-fresh 5-minute read. Watch strength build or fade.</div>
+        <div class="ex">e.g. <span>/rschart NVDA</span></div>
+      </div>
+      <div class="card cyan">
+        <div class="cmd"><span class="slash">/export</span> <span class="arg">list</span> <span class="arg">platform</span></div>
+        <div class="desc">Download a <b>watchlist file</b> of the bench, heating, or daytrade names — ready to import into <b>ThinkorSwim</b> or <b>TradingView</b>. Add <span style="color:var(--white)">sections</span> to split it into groups.</div>
+        <div class="ex">e.g. <span>/export list:bench platform:tradingview</span></div>
+      </div>
+      <div class="card cyan full">
+        <div class="cmd"><span class="slash">/help</span></div>
+        <div class="desc">A quick <b>in-chat rundown</b> of every command, any time you need it.</div>
+        <div class="ex">no ticker needed</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- FOOTER -->
+  <div class="foot">
+    <div class="note">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+      Live RS refreshes about every 5 min during market hours; the 252-day° sets nightly.
+    </div>
+    <div class="note">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4"/><path d="M12 18v4"/><path d="M4.9 4.9l2.8 2.8"/><path d="M16.3 16.3l2.8 2.8"/><path d="M2 12h4"/><path d="M18 12h4"/></svg>
+      Every scan image is powered by the Unusual Whales API.
+    </div>
+    <span class="brand">THE MARKET BISHOP</span>
+  </div>
+
+</div>
+</body>
+</html>
